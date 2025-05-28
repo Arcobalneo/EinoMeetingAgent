@@ -60,6 +60,7 @@
                         <button class="tab-btn active px-4 py-2" data-tab="content">Content</button>
                         <button class="tab-btn px-4 py-2" data-tab="summary">Summary</button>
                         <button class="tab-btn px-4 py-2" data-tab="chat">Chat</button>
+                        <button class="tab-btn px-4 py-2" data-tab="todo">TODO</button>
                     </div>
 
                     <!-- Content Tab -->
@@ -106,6 +107,16 @@
                                     class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                                     Send
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TODO Tab -->
+                    <div id="todoTab" class="tab-content hidden flex-1 flex flex-col">
+                        <div class="p-4 bg-gray-50 rounded flex-1 flex flex-col">
+                            <h3 class="text-lg font-semibold mb-2">TODO List</h3>
+                            <div id="todoList" class="flex-1 overflow-y-auto">
+                                <!-- TODO items will appear here -->
                             </div>
                         </div>
                     </div>

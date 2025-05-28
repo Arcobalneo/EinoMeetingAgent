@@ -103,7 +103,10 @@ func GetTodoList(ctx context.Context, c *app.RequestContext) {
 	status := c.Query("status")
 	priorityStr := c.Query("priority")
 
-	var priority int
+	// 初始化优先级为0，表示不按优先级筛选
+	var priority int = 0
+
+	// 只有当priorityStr非空时才尝试转换为整数
 	if priorityStr != "" {
 		var err error
 		priority, err = strconv.Atoi(priorityStr)
@@ -114,6 +117,7 @@ func GetTodoList(ctx context.Context, c *app.RequestContext) {
 	}
 
 	// 查询待办事项
+	// 当status为空字符串且priority为0时，ListTodos会返回所有指定meeting_id的待办事项
 	todos, err := sql.ListTodos(dbName, meetingID, status, priority)
 	if err != nil {
 		c.JSON(consts.StatusInternalServerError, utils.H{"error": "查询待办事项失败: " + err.Error()})

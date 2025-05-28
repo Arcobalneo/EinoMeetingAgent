@@ -1,3 +1,6 @@
+console.log('testing');
+
+
 // Global state
 let currentMeetingId = null;
 let currentSessionId = null;
@@ -20,6 +23,7 @@ const showJsonBtn = document.getElementById('showJsonBtn');
 const chatMessages = document.getElementById('chatMessages');
 const chatInput = document.getElementById('chatInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
+const todoList = document.getElementById('todoList');
 
 // URL State Management
 function updateURLState() {
@@ -261,6 +265,9 @@ async function selectMeeting(meetingId) {
     console.error('Error:', error);
   }
 
+  // Load TODO list
+  loadTodoList();
+
   // Clear chat
   chatMessages.innerHTML = '';
 }
@@ -303,6 +310,45 @@ function addMessageToChat(msgID, message, type) {
   }
 
   chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+
+// Load TODO list
+async function loadTodoList() {
+  console.log('Loading TODO list for meeting:', currentMeetingId);
+  try {
+    // Clear previous todos
+    todoList.innerHTML = '';
+    
+    const response = await fetch(`/todo?meeting_id=${currentMeetingId}`);
+    const data = await response.json();
+    
+    if (data.todos && data.todos.length > 0) {
+      // Create todo items
+      const todoItems = data.todos.map(todo => {
+        return `
+          <div class="p-3 bg-white rounded shadow mb-2">
+            <div class="font-medium">${todo.title}</div>
+            <div class="flex justify-between mt-1">
+              <span class="text-sm ${todo.status === 'completed' ? 'text-green-600' : 'text-yellow-600'}">
+                ${todo.status}
+              </span>
+              <span class="text-sm text-gray-600">
+                ${todo.assigned || 'Unassigned'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      todoList.innerHTML = todoItems;
+    } else {
+      todoList.innerHTML = '<div class="text-gray-500 text-center p-4">No TODO items found</div>';
+    }
+  } catch (error) {
+    console.error('Error loading TODO list:', error);
+    todoList.innerHTML = '<div class="text-red-500 text-center p-4">Failed to load TODO items</div>';
+  }
 }
 
 // Initialize
